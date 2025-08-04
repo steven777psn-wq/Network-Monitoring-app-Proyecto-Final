@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.pyc
+*.log
+.env
+venv/
+.env
+
+# Docker
+*.tar
+*.pid
+*.sock
+docker-compose.override.yml
+.dokerignore
+# Imágenes o volúmenes locales
+docker-data/
+*.db
+
+# Kubernetes
+*.yaml~       # backups temporales
+.kube/
+*.kubeconfig
+*.crt
+*.key
+
+# Helm (si usás charts personalizados)
+charts/
+*.tgz
+
+# Prometheus
+prometheus-data/
+prometheus.yml.bak
+
+# Grafana
+grafana-data/
+grafana.db
+grafana.ini.bak
+
+# System
+*.swp
+*.swo
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.venv/
+.venv/
+.idea/
+estructura_actual.txt
+docs/

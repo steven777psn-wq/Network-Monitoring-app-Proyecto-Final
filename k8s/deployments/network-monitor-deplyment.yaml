@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: network-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitor
+  template:
+    metadata:
+      labels:
+        app: monitor
+    spec:
+      containers:
+      - name: monitor
+        image: steven/network-monitor:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: TARGET_IPS
+          value: "10.1.1.30,123.1.1.11,172.16.1.54,123.1.1.1"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10

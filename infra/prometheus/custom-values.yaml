@@ -1,0 +1,11 @@
+server:
+  persistentVolume:
+    enabled: false
+
+alertmanager:
+  persistentVolume:
+    enabled: false
+
+pushgateway:
+  persistentVolume:
+    enabled: false
