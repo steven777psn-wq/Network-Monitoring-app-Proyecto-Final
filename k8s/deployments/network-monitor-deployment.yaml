@@ -14,15 +14,17 @@ spec:
     spec:
       containers:
       - name: monitor
-        image: steven/network-monitor:latest
+        image: steven777psn/network-monitor:latest
         ports:
-        - containerPort: 8000
+        - containerPort: 8080
         env:
         - name: TARGET_IPS
           value: "10.1.1.30,123.1.1.11,172.16.1.54,123.1.1.1"
         readinessProbe:
           httpGet:
             path: /
-            port: 8000
+            port: 8080
           initialDelaySeconds: 5
           periodSeconds: 10
+      imagePullSecrets:
+        - name: regcred

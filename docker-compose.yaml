@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+
+  ping-monitor:
+    image: steven777psn/network-monitor:latest
+    container_name: ping-monitor
+    ports:
+      - "8080:8080"  # ← actualizado al nuevo puerto
+    volumes:
+      - ./src/app:/app  # ← si querés mantener el código local montado
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/custom-values.yaml:/etc/prometheus/prometheus.yml
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    restart: always
+
+volumes:
+  grafana-storage:

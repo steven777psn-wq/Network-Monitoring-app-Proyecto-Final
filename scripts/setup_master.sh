@@ -35,3 +35,63 @@ echo "[+] Aplicando red Flannel..."
 kubectl apply -f $FLANNEL_YAML
 
 echo "[✓] Setup completo. ¡Listo para monitorizar!"
+
+
+
+
+startup 2.0 
+
+#!/bin/bash
+
+echo "🔄 Reiniciando entorno del laboratorio..."
+
+# Reinicio de Docker
+echo "🔧 Reiniciando servicio Docker..."
+sudo systemctl restart docker
+
+# Reinicio de contenedores esenciales
+echo "🐳 Reiniciando contenedores..."
+docker container restart ping-monitor
+docker container restart prometheus
+docker container restart grafana
+
+# Verificación de estado de contenedores
+echo "📋 Estado actual de contenedores:"
+docker ps --filter name=ping-monitor --filter name=prometheus --filter name=grafana
+
+# Reinicio de Kubernetes (usando kubeadm o microk8s si aplica)
+echo "📦 Reiniciando servicios de Kubernetes..."
+sudo systemctl restart kubelet
+kubectl rollout restart deployment prometheus-deployment -n monitoring
+kubectl rollout restart deployment grafana-deployment -n monitoring
+
+# Limpieza de pods fallidos (opcional)
+kubectl get pods --all-namespaces | grep CrashLoopBackOff | awk '{print $2, $1}' | xargs -r -n2 kubectl delete pod -n
+
+# Aplicación de manifiestos personalizados si están versionados
+echo "📁 Reaplicando manifiestos YAML..."
+kubectl apply -f ~/lab/manifests/
+
+# Confirmación final
+echo "✅ Entorno reiniciado. Verifica en Grafana y Prometheus que todo esté operativo."
+
+
+
+
+
+
+
+
+
+
+
+#Recontruir Docker con Docker-compose. Yaml
+docker compose build         # Construye ping-monitor
+docker compose up -d        # Levanta todo en segundo plano
+docker compose ps           # Muestra el estado de los servicios
+
+
+
+
+
+
