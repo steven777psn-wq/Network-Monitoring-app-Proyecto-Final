@@ -1,0 +1,47 @@
+# Este manifiesto crea los Services y ServiceMonitor necesarios para monitorear Pushgateway y Grafana en el namespace 'monitoring'
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pushgateway-service
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: prometheus-pushgateway
+spec:
+  selector:
+    app.kubernetes.io/name: prometheus-pushgateway
+  ports:
+    - name: metrics
+      port: 9091
+      targetPort: 9091
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: grafana
+spec:
+  selector:
+    app.kubernetes.io/name: grafana
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: pushgateway-monitor
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-pushgateway
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s

@@ -1,0 +1,183 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": null,
+    "title": "Ping Latency Dashboard",
+    "tags": ["network", "latency", "monitoring"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "30s",
+    "templating": {
+      "list": [
+        {
+          "name": "ip",
+          "type": "custom",
+          "label": "IP",
+          "query": "10.1.1.30,123.1.1.11,172.16.1.54,123.1.1.1",
+          "includeAll": false,
+          "multi": true,
+          "current": {
+            "text": "10.1.1.30",
+            "value": "10.1.1.30"
+          }
+        }
+      ]
+    },
+    "panels": [
+      {
+        "type": "stat",
+        "title": "Estado: $ip",
+        "gridPos": { "x": 0, "y": 0, "w": 4, "h": 3 },
+        "targets": [
+          {
+            "expr": "ping_latency_ms{ip=\"$ip\"} > 0",
+            "format": "time_series"
+          }
+        ],
+        "options": {
+          "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center"
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Última Latencia: $ip",
+        "gridPos": { "x": 4, "y": 0, "w": 4, "h": 3 },
+        "targets": [
+          {
+            "expr": "ping_latency_ms{ip=\"$ip\"}",
+            "format": "time_series"
+          }
+        ],
+        "options": {
+          "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center"
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Promedio 5m: $ip",
+        "gridPos": { "x": 8, "y": 0, "w": 4, "h": 3 },
+        "targets": [
+          {
+            "expr": "avg_over_time(ping_latency_ms{ip=\"$ip\"}[5m])",
+            "format": "time_series"
+          }
+        ],
+        "options": {
+          "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center"
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Máximo 5m: $ip",
+        "gridPos": { "x": 12, "y": 0, "w": 4, "h": 3 },
+        "targets": [
+          {
+            "expr": "max_over_time(ping_latency_ms{ip=\"$ip\"}[5m])",
+            "format": "time_series"
+          }
+        ],
+        "options": {
+          "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center"
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Último Ping: $ip",
+        "gridPos": { "x": 16, "y": 0, "w": 8, "h": 3 },
+        "targets": [
+          {
+            "expr": "time() - last_over_time(ping_latency_ms{ip=\"$ip\"}[5m])",
+            "format": "time_series"
+          }
+        ],
+        "options": {
+          "reduceOptions": { "calcs": ["last"], "fields": "", "values": false },
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "center"
+        }
+      },
+      {
+        "type": "timeseries",
+        "title": "Latencia por IP",
+        "gridPos": { "x": 0, "y": 4, "w": 24, "h": 6 },
+        "targets": [
+          {
+            "expr": "ping_latency_ms{ip=~\"$ip\"}",
+            "format": "time_series"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "orange", "value": 100 },
+                { "color": "red", "value": 300 }
+              ]
+            }
+          },
+          "overrides": []
+        }
+      },
+      {
+        "type": "table",
+        "title": "Resumen por IP",
+        "gridPos": { "x": 0, "y": 10, "w": 12, "h": 5 },
+        "targets": [
+          {
+            "expr": "ping_latency_ms{ip=~\"$ip\"}",
+            "format": "time_series"
+          }
+        ],
+        "options": {
+          "showHeader": true,
+          "sortBy": [{ "desc": true, "displayName": "Value" }]
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Alertas (placeholder)",
+        "gridPos": { "x": 12, "y": 10, "w": 12, "h": 5 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center"
+        },
+        "targets": [
+          {
+            "expr": "0",
+            "format": "time_series"
+          }
+        ]
+      }
+    ],
+    "annotations": {
+      "list": []
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["10s", "30s", "1m", "5m", "15m"]
+    }
+  },
+  "overwrite": true
+}

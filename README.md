@@ -128,3 +128,61 @@ Esto asegura compatibilidad con el selector de serviceMonitorSelector usado por 
 Este README documenta la integración exitosa del servicio de monitoreo de red con Prometheus. El sistema ahora puede recolectar métricas de latencia ICMP y está listo para visualización y alertas.
 
 
+
+GRAFANA ACCESS GUIDE - kube-prometheus-stack
+============================================
+
+This document explains how to access Grafana deployed via the kube-prometheus-stack Helm chart,
+including port-forwarding, credential retrieval, and troubleshooting common errors.
+
+------------------------------------------------------------
+1. PORT-FORWARDING TO ACCESS GRAFANA
+------------------------------------------------------------
+
+Grafana runs internally on port 3000, but the Kubernetes Service exposes port 80.
+
+To forward it to your local machine:
+
+    kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
+
+NOTE:
+- If port 3001 is already in use, choose another (e.g. 3002, 8080, etc.)
+
+------------------------------------------------------------
+2. RETRIEVE GRAFANA CREDENTIALS
+------------------------------------------------------------
+
+Grafana credentials are stored in a Kubernetes Secret.
+
+To retrieve them:
+
+    # Username
+    kubectl get secret kube-prometheus-stack-grafana -n monitoring \
+      -o jsonpath="{.data.admin-user}" | base64 --decode
+
+    # Password
+    kubectl get secret kube-prometheus-stack-grafana -n monitoring \
+      -o jsonpath="{.data.admin-password}" | base64 --decode
+
+In this environment:
+- Username: admin
+- Password: prom-operator
+
+------------------------------------------------------------
+3. COMMON ERRORS & FIXES
+------------------------------------------------------------
+
+❌ ERROR: "Service does not have a service port 3000"
+
+FIX:
+Use the correct exposed port (80), not Grafana's internal 3000.
+
+    kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
+
+❌ ERROR: "address already in use"
+
+FIX:
+- Check which process is using the port:
+
+     
+

@@ -4,7 +4,8 @@ metadata:
   name: network-monitor-service
   namespace: monitoring
   labels:
-    app: monitor
+    app: monitor  # ← alineado con el Deployment
+    grafana_dashboard: "true"  #  auto-discovery en grafana
 spec:
   selector:
     app: monitor

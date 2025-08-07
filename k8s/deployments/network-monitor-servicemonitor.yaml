@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: monitor
+      app: monitor  # ← alineado con el Service
   namespaceSelector:
     matchNames:
       - monitoring
