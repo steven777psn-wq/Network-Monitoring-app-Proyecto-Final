@@ -1,43 +1,10 @@
-# 📡 Network Monitoring with Prometheus and Flask
+# 🛰️ Network Monitoring Project
 
-This project deploys a lightweight network monitoring solution using Python, Flask, and Prometheus. It performs ICMP pings to multiple devices and exposes latency metrics for Prometheus to scrape.
-
----
-
-## 🚀 Features
-
-- Flask app with /metrics endpoint
-- ICMP latency collection via ping3
-- Prometheus integration using ServiceMonitor
-- Dockerized with Gunicorn for production
-- Kubernetes manifests for deployment and monitoring
-- Configurable target IPs via environment variables
+This project provides a lightweight, containerized network monitoring solution using Python, Prometheus, Alertmanager, and optional Grafana dashboards. It is designed for educational and practical use, with a focus on clarity, reproducibility, and modular deployment.
 
 ---
 
-
-## 📘 Prometheus Monitoring in Kubernetes
-Includes a custom Helm configuration to deploy Prometheus in a Kubernetes cluster—ideal for labs and testing.
-
-## 🔧 Installed Components
-- Prometheus Server
-- Alertmanager
-- Node Exporter
-- PushGateway
-- Kube-State-Metrics
-
-## 🎯 Goals
-- Collect node and app metrics
-- Visualize metrics via Prometheus UI
-- Prepare for Grafana integration
-- Optimize for resource-constrained environments
-⚙️ Instalacion:
-cd /infra/prometheus
-helm install prometheus prometheus-community/prometheus -n monitoring -f custom-values.yaml
-Note: Persistence is disabled for simplicity on nodes without a StorageClass.
-
-
-## 📁 Repository Structure
+## 📦 Project Structure
 
 ping-monitor/
 ├── check_env.py
@@ -178,79 +145,77 @@ ping-monitor/
 
 ---
 
-## 🛠 Launching the System
+## 🚀 Features
 
-helm install prometheus prometheus-community/prometheus -n monitoring -f custom-values.yaml
+- ICMP-based latency monitoring using `ping3`
+- Prometheus metrics endpoint (`/metrics`)
+- Status endpoint (`/status`) for basic health checks
+- Custom metric: `device_ping_latency_ms`
+- Alertmanager integration with sample alert rules
+- Docker Compose and Kubernetes support
+- Helm-based Prometheus stack deployment
+- Grafana integration (planned)
 
-## 💡 Notes
-- IPs are read from TARGET_IPS (comma-separated)
-- Defaults to test IPs if undefined
-- Failed pings return latency -1
+---
 
+## 🧪 Metrics Overview
 
-📘 Prometheus Integration Summary
+The Python app pings a list of devices and exposes latency metrics:
 
-🗓️ Fecha: 6 de agosto, 2025  
-🧑‍💻 Autor: Steven
+```text
+device_ping_latency_ms{device="8.8.8.8"} 23.5
+device_ping_latency_ms{device="1.1.1.1"} -1
 
-✅ Objetive
-Integrate network-monitor with Prometheus to collect ICMP latency metrics.
+• 	-1 indicates unreachable or failed ping.
+• 	Metrics are refreshed every 30 seconds.
 
-📦 Components
-- Kubernetes
-- Prometheus Operator (kube-prometheus-stack)
-- ServiceMonitor
-- Grafana (optional)
-- Flask + prometheus_client
+🔧 Local Deployment (Docker Compose)
 
-🔧 Pasos realizados
+cd infra/
+docker-compose up --build
 
-- Verify Metrics Endpoint
-curl http://network-monitor-service.monitoring.svc.cluster.local:8080/metrics
-- Fix ServiceMonitor Labels
-kubectl edit servicemonitor network-monitor-servicemonitor -n monitoring
-Update:
-metadata:
-labels:
-release: kube-prometheus-stack
-- Verify in Prometheus UI
-Check Status → Targets for network-monitor-servicemonitor status.
+☁️ Kubernetes Deploymen
+1. Apply manifests
 
+kubectl apply -f k8s/YAMLs
 
-GRAFANA ACCESS GUIDE - kube-prometheus-stack
-============================================
+Includes:
+• 	Deployment and Service for the Python app
+• 	Prometheus  for scraping metrics
+• 	Alertmanager configuration
 
-This document explains how to access Grafana deployed via the kube-prometheus-stack Helm chart,
-including port-forwarding, credential retrieval, and troubleshooting common errors.
+2. Deploy Prometheus stack via Helm
 
-------------------------------------------------------------
-1. PORT-FORWARDING TO ACCESS GRAFANA
-------------------------------------------------------------
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install monitoring prometheus-community/kube-prometheus-stack
 
-Grafana runs internally on port 3001, but the Kubernetes Service exposes port 80.
+Note: Ensure your app's Service has correct labels for Prometheus discovery.
 
-To forward it to your local machine:
+3. Access Grafana
 
-    kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
+kubectl port-forward svc/monitoring-grafana 3001:80
+kubectl get secret monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d
 
+📈 Planned Grafana Dashboard
+• 	Latency over time per device
+• 	Alert visualization for unreachable hosts
 
-------------------------------------------------------------
-2. RETRIEVE GRAFANA CREDENTIALS
-------------------------------------------------------------
+🚨 Alertin
 
-Grafana credentials are stored in a Kubernetes Secret.
-
-To retrieve them:
-
-    # Username
-    kubectl get secret kube-prometheus-stack-grafana -n monitoring \
-      -o jsonpath="{.data.admin-user}" | base64 --decode
-
-    # Password
-    kubectl get secret kube-prometheus-stack-grafana -n monitoring \
-      -o jsonpath="{.data.admin-password}" | base64 --decode
+/Prometheus/ prometheus-rule.yaml
 
 
+🧪 EVE-NG Lab Integration
 
-     
+This project is also deployed and tested within a custom EVE-NG lab environment, allowing for realistic network simulations scenarios.
+• 	The lab includes virtual routers, switches, Win Server, Palo Alto Firewall and Linux & Windows hosts configured to respond to ICMP probes.
+• 	Prometheus and the Python monitoring app are deployed in isolated containers within the lab.
+• 	This setup enables controlled testing of latency, packet loss, and alerting behavior under various network conditions.
+• 	EVE-NG provides a visual topology and supports reproducible demos for RootZone tutorials.
+
+🔍 Monitoring Integration
+• 	The Python monitoring app is deployed inside the lab and pings key devices across VLANs.
+• 	Prometheus scrapes metrics from the app, enabling visibility into latency and reachability across zones.
+• 	Alertmanager triggers notifications when devices become unreachable or latency exceeds thresholds.
+
 
