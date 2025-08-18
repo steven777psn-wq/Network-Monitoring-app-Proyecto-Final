@@ -1,0 +1,37 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ping-monitor-rules
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: ping-monitor-rules
+      rules:
+        - alert: HighPingLatency
+          expr: device_ping_latency_ms{ip=~"123.1.1.1|123.1.1.11|172.16.1.54|10.1.1.30"} > 300
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Alta latencia en {{ $labels.ip }}"
+            description: "La latencia de ping en {{ $labels.ip }} ha superado los 300ms durante 1 minuto."
+
+        - alert: PingOutage_172
+          expr: absent(device_ping_latency_ms{ip="172.16.1.54"})
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sin respuesta de ping en 172.16.1.54"
+            description: "No se ha recibido latencia de ping desde 172.16.1.54 durante 1 minuto."
+
+        - alert: PingOutage_10
+          expr: absent(device_ping_latency_ms{ip="10.1.1.30"})
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sin respuesta de ping en 10.1.1.30"
+            description: "No se ha recibido latencia de ping desde 10.1.1.30 durante 1 minuto."
