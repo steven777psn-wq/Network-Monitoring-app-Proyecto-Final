@@ -1,132 +1,220 @@
-# 📡 Monitorización de Red con Prometheus y Flask
+# 📡 Network Monitoring with Prometheus and Flask
 
-Este proyecto tiene como objetivo desplegar una solución ligera de monitoreo de red usando Python, Flask y Prometheus. La aplicación permite realizar pings a múltiples dispositivos definidos por IP y expone métricas de latencia ICMP que pueden ser recolectadas por Prometheus.
-
----
-
-## 🚀 Características Principales
-
-- 📦 App escrita en Flask, con métricas expuestas vía `/metrics`
-- 📈 Recolección de métricas ICMP por IP usando `ping3`
-- 🧠 Integración con Prometheus vía `ServiceMonitor` en Kubernetes
-- 🐳 Dockerfile optimizado para producción con Gunicorn
-- ☸️ Manifiestos de Kubernetes para despliegue, servicio y monitoreo
-- 🔧 Configuración modular con variables de entorno para IPs objetivo
+This project deploys a lightweight network monitoring solution using Python, Flask, and Prometheus. It performs ICMP pings to multiple devices and exposes latency metrics for Prometheus to scrape.
 
 ---
 
-## 🧬 Estructura del proyecto
+## 🚀 Features
+
+- Flask app with /metrics endpoint
+- ICMP latency collection via ping3
+- Prometheus integration using ServiceMonitor
+- Dockerized with Gunicorn for production
+- Kubernetes manifests for deployment and monitoring
+- Configurable target IPs via environment variables
+
+---
 
 
+## 📘 Prometheus Monitoring in Kubernetes
+Includes a custom Helm configuration to deploy Prometheus in a Kubernetes cluster—ideal for labs and testing.
 
-
-## 📘 Monitorización con Prometheus en Kubernetes
-Este repositorio contiene la configuración personalizada para desplegar Prometheus utilizando Helm en un clúster Kubernetes, ideal para entornos de laboratorio y pruebas.
-
-## 🔧 Componentes Instalados
+## 🔧 Installed Components
 - Prometheus Server
 - Alertmanager
 - Node Exporter
 - PushGateway
 - Kube-State-Metrics
 
-## 🎯 Objetivos
-- Recolectar métricas de los nodos y aplicaciones.
-- Visualizar métricas vía Prometheus UI.
-- Preparar el entorno para conectar con Grafana.
-- Optimizar el despliegue para entornos con recursos limitados.
+## 🎯 Goals
+- Collect node and app metrics
+- Visualize metrics via Prometheus UI
+- Prepare for Grafana integration
+- Optimize for resource-constrained environments
 ⚙️ Instalacion:
-cd /infra/prometheus #ahi se encuentra el custom value.yaml
-helm install prometheus prometheus-community/prometheus \
-  -n monitoring \
-  -f custom-values.yaml
-Nota: La persistencia está desactivada para facilitar la instalación sin volúmenes en nodos sin StorageClass.
+cd /infra/prometheus
+helm install prometheus prometheus-community/prometheus -n monitoring -f custom-values.yaml
+Note: Persistence is disabled for simplicity on nodes without a StorageClass.
 
-## 📁 Estructura del repositorio
+
+## 📁 Repository Structure
 
 ping-monitor/
-├── Infra/Prometheus/ custom-values.yaml         # Configuración para Helm
-├── manifests/                 # Archivos YAML opcionales
-├── README.md                  # Documentación del proyecto
-└── .gitignore                 # Archivos excluidos del repo
+├── check_env.py
+├── dashboards
+│   └── ping-latency-dashboard.json
+├── docker
+│   └── app
+├── docker-compose.yaml
+├── Dockerfile
+├── .dockerignore
+├── docs
+│   ├── estructura_actual.txt
+│   ├── estructura_actual-v2.txt
+│   ├── estructura_actual-v3.txt
+│   ├── estructura_actual-v4.txt
+│   └── estructura_actual-v5.txt
+│   └── estructura_actual-v6.txt
+├── .git
+│   ├── branches
+│   ├── COMMIT_EDITMSG
+│   ├── config
+│   ├── description
+│   ├── filter-repo
+│   │   ├── already_ran
+│   │   ├── changed-refs
+│   │   ├── commit-map
+│   │   ├── first-changed-commits
+│   │   ├── ref-map
+│   │   └── suboptimal-issues
+│   ├── HEAD
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── push-to-checkout.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   ├── exclude
+│   │   └── refs
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   ├── objects
+│   │   ├── info
+│   │   └── pack
+│   ├── ORIG_HEAD
+│   ├── packed-refs
+│   └── refs
+│       ├── heads
+│       ├── remotes
+│       └── tags
+├── .gitignore
+├── infra
+│   ├── alertmanager
+│   │   ├── alertmanager-config.yaml
+│   │   └── alertmanager.yaml
+│   └── prometheus
+│       ├── custom-values.yaml
+│       ├── prometheus-rule.yaml
+│       └── prometheus.yaml
+├── k8s
+│   ├── deployments
+│   │   ├── flask-app-deployment.yaml
+│   │   ├── network-monitor-deployment.yaml
+│   │   ├── network-monitor-servicemonitor.yaml
+│   │   └── network-monitor-service.yaml
+│   ├── monitoring
+│   │   ├── monitoring-services.yaml
+│   │   └── service-monitors
+│   ├── permisos-rbac
+│   │   ├── prometheus-rolebinding.yaml
+│   │   └── prometheus-role.yaml
+│   └── services
+│       └── flask-app-service.yaml
+├── README.md
+├── requirements.txt
+├── scripts
+│   ├── limpiarcontainerd.sh
+│   └── setup_master.sh
+├── src
+│   └── app
+│       ├── config.py
+│       ├── .idea
+│       ├── main.py
+│       ├── ping_utils.py
+│       └── __pycache__
+├── .venv
+│   ├── bin
+│   │   ├── activate
+│   │   ├── activate.csh
+│   │   ├── activate.fish
+│   │   ├── Activate.ps1
+│   │   ├── flask
+│   │   ├── gunicorn
+│   │   ├── ping3
+│   │   ├── pip
+│   │   ├── pip3
+│   │   ├── pip3.10
+│   │   ├── python -> python3
+│   │   ├── python3 -> /usr/bin/python3
+│   │   └── python3.10 -> python3
+│   ├── include
+│   ├── lib
+│   │   └── python3.10
+│   ├── lib64 -> lib
+│   └── pyvenv.cfg
+└── venv
+    ├── bin
+    │   ├── activate
+    │   ├── activate.csh
+    │   ├── activate.fish
+    │   ├── Activate.ps1
+    │   ├── flask
+    │   ├── pip
+    │   ├── pip3
+    │   ├── pip3.11
+    │   ├── python -> python3.11
+    │   ├── python3 -> python3.11
+    │   └── python3.11 -> /usr/bin/python3.11
+    ├── include
+    │   └── python3.11
+    ├── lib
+    │   └── python3.11
+    ├── lib64 -> lib
+    └── pyvenv.cfg
 
-
-## 🚨 Advertencia
-Este despliegue no persiste datos. Todos los datos se borran si el pod se reinicia. Ideal para pruebas, no recomendado para producción.
-
-Cuando lo tengas en Git, podés agregar etiquetas y documentar tus pruebas, alertas, y dashboards. ¿Querés que después te ayude a crear un panel en Grafana para que se integre directo con este setup? Lo armamos paso a paso 💡📊
+45 directories, 87 files
 
 
 ---
 
-## 🛠 Cómo levantar el sistema
+## 🛠 Launching the System
 
-```bash
-# Instalar Prometheus con Helm y configuración personalizada
-helm install prometheus prometheus-community/prometheus \
-  -n monitoring \
-  -f custom-values.yaml
+helm install prometheus prometheus-community/prometheus -n monitoring -f custom-values.yaml
 
-
-## 💡 Notas
-- La app lee las IPs desde la variable de entorno TARGET_IPS, separadas por comas.
-- Si no se define la variable, se usan IPs por defecto para prueba.
-- Los pings fallidos se marcan con latencia -1.
+## 💡 Notes
+- IPs are read from TARGET_IPS (comma-separated)
+- Defaults to test IPs if undefined
+- Failed pings return latency -1
 
 
-📘 network-monitor Integration with Prometheus
+📘 Prometheus Integration Summary
 
 🗓️ Fecha: 6 de agosto, 2025  
 🧑‍💻 Autor: Steven
 
-✅ Objetivo
-Integrar el servicio network-monitor con Prometheus para recolectar métricas de latencia ICMP hacia dispositivos de red.
+✅ Objetive
+Integrate network-monitor with Prometheus to collect ICMP latency metrics.
 
-📦 Componentes involucrados
+📦 Components
 - Kubernetes
 - Prometheus Operator (kube-prometheus-stack)
 - ServiceMonitor
-- Grafana (opcional para visualización)
-- Flask + prometheus_client (en el servicio)
+- Grafana (optional)
+- Flask + prometheus_client
 
 🔧 Pasos realizados
 
-1. Verificación del endpoint de métricas
-
+- Verify Metrics Endpoint
 curl http://network-monitor-service.monitoring.svc.cluster.local:8080/metrics
-
-Se confirmó que el endpoint responde correctamente con métricas como:
-- device_ping_latency_ms{ip="..."} → Latencia ICMP
-- Métricas estándar de Python y del proceso
-
-2. Corrección del ServiceMonitor
-
-Se detectó que Prometheus no estaba scrapeando el servicio debido a un label incorrecto.
-
-Solución aplicada:
-- Se editó el recurso activo:
-  kubectl edit servicemonitor network-monitor-servicemonitor -n monitoring
-
-- Se actualizó el archivo YAML:
-  metadata:
-    labels:
-      release: kube-prometheus-stack
-
-Esto asegura compatibilidad con el selector de serviceMonitorSelector usado por Prometheus.
-
-3. Verificación en Prometheus
-
-- Se accedió a la UI de Prometheus
-- En Status → Targets, se confirmó que el job network-monitor-servicemonitor aparece como UP
-
-📌 Próximos pasos
-- [ ] Crear panel en Grafana para visualizar device_ping_latency_ms
-- [ ] Configurar alertas para valores -1.0 o latencias elevadas
-- [ ] Expandir monitoreo a más dispositivos o protocolos
-
-📝 Notas
-Este README documenta la integración exitosa del servicio de monitoreo de red con Prometheus. El sistema ahora puede recolectar métricas de latencia ICMP y está listo para visualización y alertas.
-
+- Fix ServiceMonitor Labels
+kubectl edit servicemonitor network-monitor-servicemonitor -n monitoring
+Update:
+metadata:
+labels:
+release: kube-prometheus-stack
+- Verify in Prometheus UI
+Check Status → Targets for network-monitor-servicemonitor status.
 
 
 GRAFANA ACCESS GUIDE - kube-prometheus-stack
@@ -139,14 +227,12 @@ including port-forwarding, credential retrieval, and troubleshooting common erro
 1. PORT-FORWARDING TO ACCESS GRAFANA
 ------------------------------------------------------------
 
-Grafana runs internally on port 3000, but the Kubernetes Service exposes port 80.
+Grafana runs internally on port 3001, but the Kubernetes Service exposes port 80.
 
 To forward it to your local machine:
 
     kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
 
-NOTE:
-- If port 3001 is already in use, choose another (e.g. 3002, 8080, etc.)
 
 ------------------------------------------------------------
 2. RETRIEVE GRAFANA CREDENTIALS
@@ -164,25 +250,7 @@ To retrieve them:
     kubectl get secret kube-prometheus-stack-grafana -n monitoring \
       -o jsonpath="{.data.admin-password}" | base64 --decode
 
-In this environment:
-- Username: admin
-- Password: prom-operator
 
-------------------------------------------------------------
-3. COMMON ERRORS & FIXES
-------------------------------------------------------------
-
-❌ ERROR: "Service does not have a service port 3000"
-
-FIX:
-Use the correct exposed port (80), not Grafana's internal 3000.
-
-    kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
-
-❌ ERROR: "address already in use"
-
-FIX:
-- Check which process is using the port:
 
      
 
