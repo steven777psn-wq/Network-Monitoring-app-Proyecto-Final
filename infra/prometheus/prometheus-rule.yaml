@@ -18,20 +18,38 @@ spec:
             summary: "Alta latencia en {{ $labels.ip }}"
             description: "La latencia de ping en {{ $labels.ip }} ha superado los 300ms durante 1 minuto."
 
-        - alert: PingOutage_172
-          expr: absent(device_ping_latency_ms{ip="172.16.1.54"})
+        - alert: PingOutage_Win-Server
+          expr: device_ping_latency_ms{ip="172.16.1.54"} <= 0
           for: 1m
           labels:
             severity: critical
           annotations:
             summary: "Sin respuesta de ping en 172.16.1.54"
-            description: "No se ha recibido latencia de ping desde 172.16.1.54 durante 1 minuto."
+            description: "Latencia cero o negativa indica caída en 172.16.1.54 durante 1 minuto."
 
-        - alert: PingOutage_10
-          expr: absent(device_ping_latency_ms{ip="10.1.1.30"})
+        - alert: PingOutage_Win-PC
+          expr: device_ping_latency_ms{ip="10.1.1.30"} <= 0
           for: 1m
           labels:
             severity: critical
           annotations:
             summary: "Sin respuesta de ping en 10.1.1.30"
-            description: "No se ha recibido latencia de ping desde 10.1.1.30 durante 1 minuto."
+            description: "Latencia cero o negativa indica caída en 10.1.1.30 durante 1 minuto."
+
+        - alert: PingOutage_Router
+          expr: device_ping_latency_ms{ip="123.1.1.1"} <= 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sin respuesta de ping en Router (123.1.1.1)"
+            description: "Latencia cero o negativa indica caída en el Router durante 1 minuto."
+
+        - alert: PingOutage_PaloAlto
+          expr: device_ping_latency_ms{ip="123.1.1.11"} <= 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sin respuesta de ping en Palo-Alto (123.1.1.11)"
+            description: "Latencia cero o negativa indica caída en Palo-Alto durante 1 minuto."

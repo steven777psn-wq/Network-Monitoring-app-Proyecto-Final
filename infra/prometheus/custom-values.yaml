@@ -5,7 +5,15 @@ server:
 alertmanager:
   persistentVolume:
     enabled: false
+  config:
+    existingSecret: alertmanager-kube-prometheus-stack-alertmanager
 
 pushgateway:
   persistentVolume:
     enabled: false
+
+prometheus:
+  prometheusSpec:
+    ruleSelector:
+      matchLabels:
+        release: kube-prometheus-stack

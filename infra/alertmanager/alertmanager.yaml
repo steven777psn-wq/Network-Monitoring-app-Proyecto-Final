@@ -1,43 +1,36 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: alertmanager
-  labels:
-    app: alertmanager
-spec:
-  ports:
-    - name: web
-      port: 9093
-      targetPort: 9093
-  selector:
-    app: alertmanager
+global:
+  resolve_timeout: 5m
 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: alertmanager
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: alertmanager
-  template:
-    metadata:
-      labels:
-        app: alertmanager
-    spec:
-      containers:
-        - name: alertmanager
-          image: prom/alertmanager
-          args:
-            - "--config.file=/etc/alertmanager/config.yml"
-          ports:
-            - containerPort: 9093
-          volumeMounts:
-            - name: config
-              mountPath: /etc/alertmanager
-      volumes:
-        - name: config
-          configMap:
-            name: alertmanager-config
+route:
+  group_by: [namespace]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 1h
+  receiver: "null"
+  routes:
+    - matchers:
+        - job = "network-monitor-service"
+      receiver: telegram-webhook
+
+receivers:
+  - name: telegram-webhook
+    webhook_configs:
+      - url: 'http://telegram-webhook.default.svc.cluster.local:5000/alert'
+        send_resolved: true
+
+  - name: "null"
+
+inhibit_rules:
+  - equal: [namespace, alertname]
+    source_matchers: [severity = critical]
+    target_matchers: [severity =~ warning|info]
+  - equal: [namespace, alertname]
+    source_matchers: [severity = warning]
+    target_matchers: [severity = info]
+  - equal: [namespace]
+    source_matchers: [alertname = InfoInhibitor]
+    target_matchers: [severity = info]
+  - target_matchers: [alertname = InfoInhibitor]
+
+templates:
+  - /etc/alertmanager/config/*.tmpl

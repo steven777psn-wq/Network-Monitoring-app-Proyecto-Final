@@ -4,18 +4,13 @@ metadata:
   name: alertmanager-config
 data:
   config.yml: |
-    global:
-      smtp_smarthost: 'smtp.gmail.com:587'
-      smtp_from: 'monitoring@duckdns.org'
-      smtp_auth_username: 'steven777cr@gmail.com'
-      smtp_auth_password: 'iodungmjwvmzrdqz'
-      smtp_require_tls: true
+    global: {}
 
     route:
-      receiver: email-alerts
+      receiver: telegram-webhook
 
     receivers:
-      - name: email-alerts
-        email_configs:
-          - to: 'steven777psn@gmail.com'
+      - name: telegram-webhook
+        webhook_configs:
+          - url: 'http://telegram-webhook.default.svc.cluster.local:5000/alert'
             send_resolved: true
