@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      KUBECONFIG: $HOME/.kube/config
 
     steps:
       - name: Checkout repo
@@ -17,6 +19,9 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+      - name: Test kubectl connection
+        run: kubectl cluster-info
 
       - name: Install dependencies
         run: |
