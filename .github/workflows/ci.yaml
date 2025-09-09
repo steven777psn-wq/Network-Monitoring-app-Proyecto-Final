@@ -3,6 +3,7 @@ name: RootZone CI/CD Pipeline
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   ansible-ci:
@@ -22,6 +23,9 @@ jobs:
 
       - name: Deploy monitoring stack
         run: ansible-playbook ansible/playbooks/deploy-monitoring.yml
+
+      - name: Check running pods
+        run: kubectl get pods --all-namespaces
 
       - name: Validate services
         run: ansible-playbook ansible/playbooks/validate.yml
