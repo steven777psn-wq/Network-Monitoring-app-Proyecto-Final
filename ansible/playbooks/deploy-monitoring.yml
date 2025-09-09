@@ -4,11 +4,6 @@
   gather_facts: false
 
   tasks:
-    - name: Apply Prometheus RBAC
-      shell: |
-        kubectl apply -f k8s/permisos-rbac/prometheus-role.yaml
-        kubectl apply -f k8s/permisos-rbac/prometheus-rolebinding.yaml
-
     - name: Apply Prometheus rules
       shell: kubectl apply -f infra/prometheus/prometheus-rule.yaml
 
