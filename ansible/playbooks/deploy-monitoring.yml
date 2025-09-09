@@ -1,16 +1,31 @@
 - name: Deploy monitoring stack
   hosts: localhost
-  gather_facts: no
+  connection: local
+  gather_facts: false
+
   tasks:
-    - name: Apply Prometheus manifests
-      shell: kubectl apply -f manifests/prometheus.yaml
+    - name: Deploy Prometheus RBAC
+      shell: kubectl apply -f k8s/permisos-rbac/prometheus-role.yaml && kubectl apply -f k8s/permisos-rbac/prometheus-rolebinding.yaml
 
-    - name: Apply Grafana manifests
-      shell: kubectl apply -f manifests/grafana.yaml
+    - name: Deploy Prometheus rules
+      shell: kubectl apply -f infra/prometheus/prometheus-rule.yaml
 
-    - name: Apply Alertmanager manifests
-      shell: kubectl apply -f manifests/alertmanager.yaml
+    - name: Deploy Prometheus service monitors
+      shell: kubectl apply -f k8s/deployments/network-monitor-servicemonitor.yaml
 
-    - name: Apply Telegram webhook
-      shell: kubectl apply -f manifests/telegram-webhook.yaml
+    - name: Deploy Prometheus services
+      shell: kubectl apply -f k8s/monitoring/monitoring-services.yaml
 
+    - name: Deploy Alertmanager
+      shell: kubectl apply -f infra/alertmanager/alertmanager.yaml
+
+    - name: Deploy Telegram webhook
+      shell: |
+        kubectl apply -f k8s/telegram-webhook/deployment.yaml
+        kubectl apply -f k8s/telegram-webhook/service.yaml
+        kubectl apply -f k8s/telegram-webhook/secret.yaml
+
+    - name: Deploy Flask app
+      shell: |
+        kubectl apply -f k8s/deployments/flask-app-deployment.yaml
+        kubectl apply -f k8s/services/flask-app-service.yaml
