@@ -4,17 +4,23 @@
   gather_facts: false
 
   tasks:
-    - name: Deploy Prometheus RBAC
-      shell: kubectl apply -f k8s/permisos-rbac/prometheus-role.yaml && kubectl apply -f k8s/permisos-rbac/prometheus-rolebinding.yaml
+    - name: Apply Prometheus RBAC
+      shell: |
+        kubectl apply -f k8s/permisos-rbac/prometheus-role.yaml
+        kubectl apply -f k8s/permisos-rbac/prometheus-rolebinding.yaml
 
-    - name: Deploy Prometheus rules
+    - name: Apply Prometheus rules
       shell: kubectl apply -f infra/prometheus/prometheus-rule.yaml
 
-    - name: Deploy Prometheus service monitors
-      shell: kubectl apply -f k8s/deployments/network-monitor-servicemonitor.yaml
+    - name: Apply Prometheus config (if used as ConfigMap)
+      shell: kubectl create configmap prometheus-config --from-file=infra/prometheus/prometheus.yaml -n monitoring --dry-run=client -o yaml | kubectl apply -f -
+      ignore_errors: yes  # Solo si estás usando esta config como volumen
 
-    - name: Deploy Prometheus services
+    - name: Apply monitoring services
       shell: kubectl apply -f k8s/monitoring/monitoring-services.yaml
+
+    - name: Apply service monitors
+      shell: kubectl apply -f k8s/monitoring/service-monitors
 
     - name: Deploy Alertmanager
       shell: kubectl apply -f infra/alertmanager/alertmanager.yaml
@@ -29,3 +35,9 @@
       shell: |
         kubectl apply -f k8s/deployments/flask-app-deployment.yaml
         kubectl apply -f k8s/services/flask-app-service.yaml
+
+    - name: Deploy Network Monitor
+      shell: |
+        kubectl apply -f k8s/deployments/network-monitor-deployment.yaml
+        kubectl apply -f k8s/deployments/network-monitor-service.yaml
+        kubectl apply -f k8s/deployments/network-monitor-servicemonitor.yaml
