@@ -1,0 +1,21 @@
+- name: Validate monitoring services
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Check Prometheus endpoint
+      uri:
+        url: http://prometheus.monitoring.svc.cluster.local:9090
+        status_code: 200
+
+    - name: Check Grafana endpoint
+      uri:
+        url: http://grafana.monitoring.svc.cluster.local:3000
+        status_code: 200
+
+    - name: Check Telegram webhook pod
+      shell: kubectl get pods -n default | grep telegram-webhook
+      register: webhook_status
+
+    - name: Show webhook pod status
+      debug:
+        var: webhook_status.stdout_lines

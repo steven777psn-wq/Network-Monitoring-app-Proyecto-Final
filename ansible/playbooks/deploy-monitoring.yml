@@ -1,0 +1,16 @@
+- name: Deploy monitoring stack
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Apply Prometheus manifests
+      shell: kubectl apply -f manifests/prometheus.yaml
+
+    - name: Apply Grafana manifests
+      shell: kubectl apply -f manifests/grafana.yaml
+
+    - name: Apply Alertmanager manifests
+      shell: kubectl apply -f manifests/alertmanager.yaml
+
+    - name: Apply Telegram webhook
+      shell: kubectl apply -f manifests/telegram-webhook.yaml
+

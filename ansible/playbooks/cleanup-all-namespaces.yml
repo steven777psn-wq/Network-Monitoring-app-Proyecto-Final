@@ -1,0 +1,28 @@
+- name: Clean residual pods across namespaces
+  hosts: localhost
+  gather_facts: no
+  vars:
+    namespaces_to_clean:
+      - default
+      - monitoring
+      - kube-system
+      - kube-flannel
+
+  tasks:
+    - name: Delete Completed pods
+      shell: |
+        kubectl get pods -n {{ item }} --field-selector=status.phase=Succeeded -o name | xargs -r kubectl delete -n {{ item }}
+      loop: "{{ namespaces_to_clean }}"
+      ignore_errors: yes
+
+    - name: Delete Failed pods
+      shell: |
+        kubectl get pods -n {{ item }} --field-selector=status.phase=Failed -o name | xargs -r kubectl delete -n {{ item }}
+      loop: "{{ namespaces_to_clean }}"
+      ignore_errors: yes
+
+    - name: Delete pods with ContainerStatusUnknown
+      shell: |
+        kubectl get pods -n {{ item }} --no-headers | grep 'ContainerStatusUnknown' | awk '{print $1}' | xargs -r kubectl delete pod -n {{ item }}
+      loop: "{{ namespaces_to_clean }}"
+      ignore_errors: yes

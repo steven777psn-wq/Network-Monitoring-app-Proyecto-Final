@@ -1,0 +1,22 @@
+name: RootZone CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  ansible-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Cleanup Kubernetes pods
+        run: ansible-playbook ansible/playbooks/cleanup-all-namespaces.yml
+
+      - name: Deploy monitoring stack
+        run: ansible-playbook ansible/playbooks/deploy-monitoring.yml
+
+      - name: Validate services
+        run: ansible-playbook ansible/playbooks/validate.yml

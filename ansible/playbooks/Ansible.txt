@@ -1,0 +1,7 @@
+playbook monitoring : clean dead pods in monitoring namespace.
+playbook all-namespaces : crean dead pods in all namespaces 
+
+how to run this playbooks with ansible: 
+# ansible-playbook cleanup-monitoring.yml
+# ansible-playbook cleanup-all-namespaces.yml
+
