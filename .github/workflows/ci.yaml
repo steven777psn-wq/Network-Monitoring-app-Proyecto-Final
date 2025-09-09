@@ -6,11 +6,16 @@ on:
 
 jobs:
   ansible-ci:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible kubectl
 
       - name: Cleanup Kubernetes pods
         run: ansible-playbook ansible/playbooks/cleanup-all-namespaces.yml

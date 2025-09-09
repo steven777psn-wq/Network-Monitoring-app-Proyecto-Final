@@ -7,21 +7,11 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    env:
-      KUBECONFIG: $HOME/.kube/config
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-
-      - name: Set up kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
-
-      - name: Test kubectl connection
-        run: kubectl cluster-info
 
       - name: Install dependencies
         run: |
