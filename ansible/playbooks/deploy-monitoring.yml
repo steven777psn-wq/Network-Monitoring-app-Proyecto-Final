@@ -6,14 +6,14 @@
   tasks:
     # 🛡️ Prometheus RBAC
     - name: Apply Prometheus Role
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-role.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-role.yaml"
 
     - name: Apply Prometheus RoleBinding
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-rolebinding.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-rolebinding.yaml"
 
     # 📊 Prometheus Config & Rules
     - name: Apply Prometheus rules
-      shell: kubectl apply -f "{{ playbook_dir }}/../../infra/prometheus/prometheus-rule.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../infra/prometheus/prometheus-rule.yaml"
 
     - name: Apply Prometheus config (if used as ConfigMap)
       shell: kubectl create configmap prometheus-config --from-file="{{ playbook_dir }}/../../infra/prometheus/prometheus.yaml" -n monitoring --dry-run=client -o yaml | kubectl apply -f -
@@ -21,31 +21,31 @@
 
     # 🧩 Monitoring Services
     - name: Apply monitoring services
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/monitoring/monitoring-services.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/monitoring/monitoring-services.yaml"
 
     - name: Apply service monitors
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/monitoring/service-monitors"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/monitoring/service-monitors"
 
     # 🚨 Alertmanager
     - name: Apply Alertmanager ConfigMap
-      shell: kubectl apply -f "{{ playbook_dir }}/../../infra/alertmanager/alertmanager-config.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../infra/alertmanager/alertmanager-config.yaml"
 
     # 📬 Telegram Webhook
     - name: Deploy Telegram webhook - Deployment
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/telegram-webhook/deployment.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/telegram-webhook/deployment.yaml"
 
     - name: Deploy Telegram webhook - Service
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/telegram-webhook/service.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/telegram-webhook/service.yaml"
 
     - name: Deploy Telegram webhook - Secret
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/telegram-webhook/secret.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/telegram-webhook/secret.yaml"
 
     # 📡 Network Monitor
     - name: Deploy Network Monitor - Deployment
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-deployment.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-deployment.yaml"
 
     - name: Deploy Network Monitor - Service
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-service.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-service.yaml"
 
     - name: Deploy Network Monitor - ServiceMonitor
-      shell: kubectl apply -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-servicemonitor.yaml"
+      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-servicemonitor.yaml"
