@@ -79,3 +79,4 @@ Thumbs.db
 # 🧬 Git
 .git/
 docs/
+actions-runner/
