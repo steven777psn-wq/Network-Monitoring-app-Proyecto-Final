@@ -1,0 +1,200 @@
+{
+  "dashboard": {
+    "title": "Ping Monitor - Static IP View",
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "type": "timeseries",
+        "title": "Latency - All IPs",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "avg(device_ping_latency_ms) by (ip)",
+            "legendFormat": "{{ip}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": { "x": 0, "y": 0, "w": 24, "h": 8 }
+      },
+      {
+        "type": "stat",
+        "title": "Outage - 123.1.1.1",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "min_over_time(device_ping_latency_ms{ip=\"123.1.1.1\"}[5m])",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": null, "color": "red" },
+                { "value": 1, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "x": 0, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "type": "stat",
+        "title": "Outage - 123.1.1.11",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "min_over_time(device_ping_latency_ms{ip=\"123.1.1.11\"}[5m])",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": null, "color": "red" },
+                { "value": 1, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "x": 6, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "type": "stat",
+        "title": "Outage - 172.16.1.54",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "min_over_time(device_ping_latency_ms{ip=\"172.16.1.54\"}[5m])",
+            "refId": "D"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": null, "color": "red" },
+                { "value": 1, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "x": 12, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "type": "stat",
+        "title": "Outage - 10.1.1.30",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "min_over_time(device_ping_latency_ms{ip=\"10.1.1.30\"}[5m])",
+            "refId": "E"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": null, "color": "red" },
+                { "value": 1, "color": "green" }
+              ]
+            }
+          }
+        },
+        "gridPos": { "x": 18, "y": 8, "w": 6, "h": 4 }
+      },
+      {
+        "type": "timeseries",
+        "title": "Latency - 123.1.1.1",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "device_ping_latency_ms{ip=\"123.1.1.1\"}",
+            "legendFormat": "123.1.1.1",
+            "refId": "F"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms"
+          }
+        },
+        "gridPos": { "x": 0, "y": 12, "w": 6, "h": 6 }
+      },
+      {
+        "type": "timeseries",
+        "title": "Latency - 123.1.1.11",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "device_ping_latency_ms{ip=\"123.1.1.11\"}",
+            "legendFormat": "123.1.1.11",
+            "refId": "G"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms"
+          }
+        },
+        "gridPos": { "x": 6, "y": 12, "w": 6, "h": 6 }
+      },
+      {
+        "type": "timeseries",
+        "title": "Latency - 172.16.1.54",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "device_ping_latency_ms{ip=\"172.16.1.54\"}",
+            "legendFormat": "172.16.1.54",
+            "refId": "H"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms"
+          }
+        },
+        "gridPos": { "x": 12, "y": 12, "w": 6, "h": 6 }
+      },
+      {
+        "type": "timeseries",
+        "title": "Latency - 10.1.1.30",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "device_ping_latency_ms{ip=\"10.1.1.30\"}",
+            "legendFormat": "10.1.1.30",
+            "refId": "I"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms"
+          }
+        },
+        "gridPos": { "x": 18, "y": 12, "w": 6, "h": 6 }
+      }
+    ]
+  }
+}
