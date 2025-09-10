@@ -125,7 +125,7 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 • 	The lab includes virtual routers, switches, Win Server, Palo Alto Firewall and Linux & Windows hosts configured to respond to ICMP probes.
 • 	Prometheus and the Python monitoring app are deployed in isolated containers within the lab.
 • 	This setup enables controlled testing of latency, packet loss, and alerting behavior under various network conditions.
-• 	EVE-NG provides a visual topology and supports reproducible demos for testing and .
+• 	EVE-NG provides a visual topology and supports reproducible demos for testing and education.
 
 🔍 Monitoring Integration
 • 	The Python monitoring app pings key devices across VLANs
