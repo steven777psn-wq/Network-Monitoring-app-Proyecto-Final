@@ -1,5 +1,5 @@
 name: RootZone CI/CD Pipeline
-
+#Validar que todo el sistema esté limpio, desplegado y funcionando correctamente.
 on:
   push:
     branches: [ "main" ]

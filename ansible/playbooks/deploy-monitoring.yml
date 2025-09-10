@@ -1,26 +1,37 @@
-- name: Deploy monitoring stack
+- name: 🚀 Deploy Monitoring Stack
   hosts: localhost
   connection: local
   gather_facts: false
 
+  vars:
+    rbac_files:
+      - "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-role.yaml"
+      - "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-rolebinding.yaml"
+    prometheus_rule: "{{ playbook_dir }}/../../infra/prometheus/prometheus-rule.yaml"
+    prometheus_config: "{{ playbook_dir }}/../../infra/prometheus/prometheus.yaml"
+    alertmanager_config: "{{ playbook_dir }}/../../infra/alertmanager/alertmanager-config.yaml"
+    monitoring_manifests: "{{ query('fileglob', playbook_dir ~ '/../../k8s/monitoring/*.yaml') }}"
+    telegram_manifests: "{{ query('fileglob', playbook_dir ~ '/../../k8s/telegram-webhook/*.yaml') }}"
+    network_manifests: "{{ query('fileglob', playbook_dir ~ '/../../k8s/deployments/*.yaml') }}"
+
   tasks:
+
     # 🛡️ Prometheus RBAC
     - name: Apply Prometheus RBAC
       shell: kubectl apply --validate=false -f "{{ item }}"
-      loop:
-        - "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-role.yaml"
-        - "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-rolebinding.yaml"
+      loop: "{{ rbac_files }}"
       tags: prometheus_rbac
 
-    # 📊 Prometheus Config & Rules
+    # 📊 Prometheus Rules
     - name: Apply Prometheus rules
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../infra/prometheus/prometheus-rule.yaml"
+      shell: kubectl apply --validate=false -f "{{ prometheus_rule }}"
       tags: prometheus_rules
 
+    # ⚙️ Prometheus ConfigMap
     - name: Apply Prometheus config (ConfigMap)
       shell: |
         kubectl create configmap prometheus-config \
-          --from-file="{{ playbook_dir }}/../../infra/prometheus/prometheus.yaml" \
+          --from-file="{{ prometheus_config }}" \
           -n monitoring --dry-run=client -o yaml | kubectl apply -f -
       ignore_errors: yes
       tags: prometheus_config
@@ -28,35 +39,33 @@
     # 🧩 Monitoring Services
     - name: Apply monitoring services
       shell: kubectl apply --validate=false -f "{{ item }}"
-      loop:
-        - "{{ playbook_dir }}/../../k8s/monitoring/monitoring-services.yaml"
-        - "{{ playbook_dir }}/../../k8s/monitoring/service-monitors"
+      loop: "{{ monitoring_manifests }}"
+      when: item is file
+      ignore_errors: yes
       tags: monitoring_services
 
     # 🚨 Alertmanager
     - name: Apply Alertmanager config
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../infra/alertmanager/alertmanager-config.yaml"
+      shell: kubectl apply --validate=false -f "{{ alertmanager_config }}"
       tags: alertmanager
 
     # 📬 Telegram Webhook
     - name: Deploy Telegram webhook
       shell: kubectl apply --validate=false -f "{{ item }}"
-      loop:
-        - "{{ playbook_dir }}/../../k8s/telegram-webhook/deployment.yaml"
-        - "{{ playbook_dir }}/../../k8s/telegram-webhook/service.yaml"
-        - "{{ playbook_dir }}/../../k8s/telegram-webhook/secret.yaml"
+      loop: "{{ telegram_manifests }}"
+      when: item is file
+      ignore_errors: yes
       tags: telegram_webhook
 
     # 📡 Network Monitor
     - name: Deploy Network Monitor
       shell: kubectl apply --validate=false -f "{{ item }}"
-      loop:
-        - "{{ playbook_dir }}/../../k8s/deployments/network-monitor-deployment.yaml"
-        - "{{ playbook_dir }}/../../k8s/deployments/network-monitor-service.yaml"
-        - "{{ playbook_dir }}/../../k8s/deployments/network-monitor-servicemonitor.yaml"
+      loop: "{{ network_manifests }}"
+      when: item is file
+      ignore_errors: yes
       tags: network_monitor
 
     # ✅ Notificación final
     - name: Notify deployment success
-      shell: echo -e "\e[32m✅ Monitoring stack deployed successfully\e[0m"
+      shell: echo "✅ Monitoring stack deployed successfully"
       tags: notify
