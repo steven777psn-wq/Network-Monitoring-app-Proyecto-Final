@@ -5,47 +5,58 @@
 
   tasks:
     # 🛡️ Prometheus RBAC
-    - name: Apply Prometheus Role
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-role.yaml"
-
-    - name: Apply Prometheus RoleBinding
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-rolebinding.yaml"
+    - name: Apply Prometheus RBAC
+      shell: kubectl apply --validate=false -f "{{ item }}"
+      loop:
+        - "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-role.yaml"
+        - "{{ playbook_dir }}/../../k8s/permisos-rbac/prometheus-rolebinding.yaml"
+      tags: prometheus_rbac
 
     # 📊 Prometheus Config & Rules
     - name: Apply Prometheus rules
       shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../infra/prometheus/prometheus-rule.yaml"
+      tags: prometheus_rules
 
-    - name: Apply Prometheus config (if used as ConfigMap)
-      shell: kubectl create configmap prometheus-config --from-file="{{ playbook_dir }}/../../infra/prometheus/prometheus.yaml" -n monitoring --dry-run=client -o yaml | kubectl apply -f -
+    - name: Apply Prometheus config (ConfigMap)
+      shell: |
+        kubectl create configmap prometheus-config \
+          --from-file="{{ playbook_dir }}/../../infra/prometheus/prometheus.yaml" \
+          -n monitoring --dry-run=client -o yaml | kubectl apply -f -
       ignore_errors: yes
+      tags: prometheus_config
 
     # 🧩 Monitoring Services
     - name: Apply monitoring services
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/monitoring/monitoring-services.yaml"
-
-    - name: Apply service monitors
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/monitoring/service-monitors"
+      shell: kubectl apply --validate=false -f "{{ item }}"
+      loop:
+        - "{{ playbook_dir }}/../../k8s/monitoring/monitoring-services.yaml"
+        - "{{ playbook_dir }}/../../k8s/monitoring/service-monitors"
+      tags: monitoring_services
 
     # 🚨 Alertmanager
-    - name: Apply Alertmanager ConfigMap
+    - name: Apply Alertmanager config
       shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../infra/alertmanager/alertmanager-config.yaml"
+      tags: alertmanager
 
     # 📬 Telegram Webhook
-    - name: Deploy Telegram webhook - Deployment
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/telegram-webhook/deployment.yaml"
-
-    - name: Deploy Telegram webhook - Service
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/telegram-webhook/service.yaml"
-
-    - name: Deploy Telegram webhook - Secret
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/telegram-webhook/secret.yaml"
+    - name: Deploy Telegram webhook
+      shell: kubectl apply --validate=false -f "{{ item }}"
+      loop:
+        - "{{ playbook_dir }}/../../k8s/telegram-webhook/deployment.yaml"
+        - "{{ playbook_dir }}/../../k8s/telegram-webhook/service.yaml"
+        - "{{ playbook_dir }}/../../k8s/telegram-webhook/secret.yaml"
+      tags: telegram_webhook
 
     # 📡 Network Monitor
-    - name: Deploy Network Monitor - Deployment
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-deployment.yaml"
+    - name: Deploy Network Monitor
+      shell: kubectl apply --validate=false -f "{{ item }}"
+      loop:
+        - "{{ playbook_dir }}/../../k8s/deployments/network-monitor-deployment.yaml"
+        - "{{ playbook_dir }}/../../k8s/deployments/network-monitor-service.yaml"
+        - "{{ playbook_dir }}/../../k8s/deployments/network-monitor-servicemonitor.yaml"
+      tags: network_monitor
 
-    - name: Deploy Network Monitor - Service
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-service.yaml"
-
-    - name: Deploy Network Monitor - ServiceMonitor
-      shell: kubectl apply --validate=false -f "{{ playbook_dir }}/../../k8s/deployments/network-monitor-servicemonitor.yaml"
+    # ✅ Notificación final
+    - name: Notify deployment success
+      shell: echo -e "\e[32m✅ Monitoring stack deployed successfully\e[0m"
+      tags: notify
