@@ -6,28 +6,36 @@ This project provides a lightweight, containerized network monitoring solution u
 
 ## 📦 Project Structure
 
-├── src/                        # Source code
-│   ├── app/                   # Ping monitoring logic (main.py, ping_utils.py, config.py)
-│   └── telegram-webhook/      # Telegram alert relay service (app.py, Dockerfile)
-
-├── infra/                     # Monitoring infrastructure
-│   ├── prometheus/           # Prometheus config and alert rules
-│   └── alertmanager/         # Alertmanager routing and webhook setup
-
-├── k8s/                       # Kubernetes manifests
-│   ├── deployments/          # App and monitor deployments
-│   ├── services/             # Service definitions
-│   ├── permisos-rbac/        # RBAC roles and bindings
-│   └── telegram-webhook/     # Telegram webhook deployment and service
-
-├── dashboards/                # Grafana dashboards (JSON)
-├── docker/                    # Docker build context and app packaging
-├── scripts/                   # Utility scripts (setup, cleanup)
-├── .env                       # Environment variables (excluded from Git)
-├── docker-compose.yaml        # Local dev orchestration
-├── README.md                  # Project documentation
-├── requirements.txt           # Python dependencies
-
+ping-monitor/
+├── ansible/
+│   └── playbooks/
+│       ├── deploy-monitoring.yml         # Deploys Prometheus, Grafana, Alertmanager, Telegram webhook
+│       ├── validate.yml                  # Validates service health via internal cluster endpoints
+│       └── cleanup-all-namespaces.yml    # Cleans up completed/failed pods across key namespaces
+├── .github/
+│   └── workflows/
+│       ├── ci.yaml                       # Full CI/CD pipeline: cleanup, deploy, validate
+│       └── deploy.yaml                   # Lightweight deploy-only workflow
+├── infra/
+│   ├── prometheus/                       # Prometheus config, rules, and values
+│   └── alertmanager/                     # Alertmanager configuration
+├── k8s/
+│   ├── permisos-rbac/                    # Prometheus RBAC manifests
+│   ├── monitoring/                       # Monitoring service manifests
+│   ├── deployments/                      # Network monitor deployment and ServiceMonitor
+│   └── telegram-webhook/                 # Telegram webhook deployment, secret, and service
+├── dashboards/
+│   └── ping-latency-dashboard.json       # Grafana dashboard for latency visualization
+├── src/
+│   ├── app/                              # Core app logic (ping utils, config, main)
+│   └── telegram-webhook/                 # Telegram webhook service (Dockerized)
+├── scripts/                              # Setup and cleanup scripts
+├── .env                                  # Environment variables
+├── check_env.py                          # Environment validation script
+├── docker-compose.yaml                   # Local orchestration
+├── Dockerfile                            # Container build for app or webhook
+├── requirements.txt                      # Python dependencies
+├── README.md                             # Project documentation
 
 ---
 
@@ -125,8 +133,100 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 • 	Alertmanager triggers notifications when devices become unreachable or latency exceeds thresholds
 • 	Telegram webhook delivers alerts in real time to your configured bot/channe
 
+📦 Lab Monitoring Stack: CI/CD + Ansible Automation
 
+This repository automates the deployment and validation of a Kubernetes-based monitoring stack using Ansible and GitHub Actions. It includes Prometheus, Grafana, Alertmanager, and a Telegram webhook, with full CI/CD integration and healthcheck routines.
 
+🧰 Components
+- Ansible Playbooks for deployment, cleanup, and validation
+- GitHub Actions Workflows for CI/CD automation
+- Kubernetes Manifests for RBAC, services, and monitoring pods
+
+📁 Directory Structure:
+
+ping-monitor/
+├── ansible/
+│   └── playbooks/
+│       ├── deploy-monitoring.yml
+│       ├── validate.yml
+│       └── cleanup-all-namespaces.yml
+├── .github/
+│   └── workflows/
+│       ├── ci.yaml
+│       └── deploy.yaml
+
+🚀 Deployment Playbook: deploy-monitoring.yml
+Applies all Kubernetes manifests required for the monitoring stack:
+- Prometheus RBAC, rules, and config
+- Alertmanager configuration
+- Telegram webhook
+- Network monitoring services
+
+# ansible-playbook ansible/playbooks/deploy-monitoring.yml
+
+✅ Validation Playbook: validate.yml
+Performs healthchecks using internal cluster DNS:
+- Prometheus readiness (/-/ready)
+- Grafana availability
+- Telegram webhook pod status
+Includes conditional notifications for success or failure
+
+# ansible-playbook ansible/playbooks/validate.yml
+
+🧹 Cleanup Playbook: cleanup-all-namespaces.yml
+Deletes residual pods across key namespaces:
+- Completed pods
+- Failed pods
+- Pods with ContainerStatusUnknown
+ansible-playbook ansible/playbooks/cleanup-all-namespaces.yml
+
+# ansible-playbook ansible/playbooks/cleanup-all-namespaces.yml
+
+⚙️ GitHub Actions Workflows
+ci.yaml: Full CI/CD Pipeline
+Runs on every push to main or manual trigger. Steps:
+- Checkout repo
+- Install dependencies (ansible, kubectl)
+- Cleanup residual pods
+- Deploy monitoring stack
+- Validate services
+
+name: RootZone CI/CD Pipeline
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+  
+deploy.yaml: Lightweight Deployment
+Runs only the deployment playbook on push to main.
+
+name: Deploy Monitoring Stack
+on:
+  push:
+    branches:
+      - main
+
+Both workflows run on a self-hosted runner for full control over the environment
+
+🧪 Pre-commit Validation
+Before pushing changes:
+
+# Lint for best practices
+ansible-lint ansible/playbooks/*.yml
+
+# Dry-run to preview changes
+ansible-playbook ansible/playbooks/deploy-monitoring.yml --check
+
+📬 Notifications & Healthchecks
+The validation playbook includes logic to:
+- Show endpoint status
+- Detect failures
+- Print success or failure messages
+It can be extended to send Telegram alerts...(Will work on this latter) 
+
+🧠 Notes
+- File paths are dynamically resolved.
+- Error handling is built-in with ignore_errors: true and conditional blocks.
 
 
 
