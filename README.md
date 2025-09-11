@@ -128,6 +128,8 @@ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f
 
 Note: Ensure your app's Service has correct labels for Prometheus discovery.
 
+![Prometheus Targets](docs/screenshots/prometheus-targets.png)
+
 3. Access Grafana
 
 kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
@@ -136,7 +138,9 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 📈 Planned Grafana Dashboard
 •       Latency over time per device
 •       Alert visualization for unreachable hosts
-•       Outage heatmap per zone
+•       Outage heatmap per device
+
+![Grafana Dashboard](docs/screenshots/grafana-dashboard.png)
 
 
 🚨 Alerting System
@@ -148,6 +152,7 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 •       Alertmanager routes only alerts from job="network-monitor-service" to Telegram
 •       Telegram webhook receives alerts via HTTP and forwards them to your bot
 
+![Prometheus Alert Firing](docs/screenshots/prometheus-alert-firing.png)
 
 📬 Telegram Webhook Integration
 • 	Custom Flask app deployed as a Kubernetes service
@@ -157,6 +162,8 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
         - matchers:
           - job = "network-monitor-service"
 
+![Telegram Alerts](docs/screenshots/telegram-alerts.png)
+
 🧪 EVE-NG Lab Integration
 
  This project is also deployed and tested within a custom EVE-NG lab environment, allowing for realistic network simulations scenarios.
@@ -164,6 +171,8 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 • 	Prometheus and the Python monitoring app are deployed in isolated containers within the lab.
 • 	This setup enables controlled testing of latency, packet loss, and alerting behavior under various network conditions.
 • 	EVE-NG provides a visual topology and supports reproducible demos for testing and education.
+
+![EVE-NG Lab](docs/screenshots/EVE-NG_Lab.png)
 
 🔍 Monitoring Integration
 • 	The Python monitoring app pings key devices across VLANs
@@ -275,6 +284,8 @@ It can be extended to send Telegram alerts...(Will work on this latter)
 🧠 Notes
 - File paths are dynamically resolved.
 - Error handling is built-in with ignore_errors: true and conditional blocks.
+
+![CI/CD Tasks](docs/screenshots/CI-CD_Tasks.png)
 
 ## Contributions
 
