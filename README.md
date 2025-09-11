@@ -162,7 +162,8 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
         - matchers:
           - job = "network-monitor-service"
 
-![Telegram Alerts](docs/screenshots/telegram-alerts.png)
+<h4>Notificaciones por Telegram</h4>
+<img src="docs/screenshots/telegram-alerts.png" alt="Telegram Alerts" width="150"/>
 
 🧪 EVE-NG Lab Integration
 
