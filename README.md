@@ -89,7 +89,7 @@ ping-monitor/
 
 The Python app pings a list of devices and exposes latency metrics:
 
-```Example text:
+Example text:
 device_ping_latency_ms{device="123.1.1.1"} 23.5
 device_ping_latency_ms{device="123.1.1.1"} -1
 
