@@ -41,7 +41,7 @@ ping-monitor/
 │   ├── deployments/                      # Network monitor deployment and ServiceMonitor
 │   └── telegram-webhook/                 # Telegram webhook deployment, secret, and service
 ├── dashboards/
-│   └── ping-latency-dashboard.json       # Grafana dashboard for latency visualization
+│   └── ping-latency-dashboard.json       # Grafana dashboard for latency / outage visualization
 ├── src/
 │   ├── app/                              # Core app logic (ping utils, config, main)
 │   └── telegram-webhook/                 # Telegram webhook service (Dockerized)
@@ -49,7 +49,7 @@ ping-monitor/
 ├── .env                                  # Environment variables
 ├── check_env.py                          # Environment validation script
 ├── docker-compose.yaml                   # Local orchestration
-├── Dockerfile                            # Container build for app or webhook
+├── Dockerfile                            # Container build for core app
 ├── requirements.txt                      # Python dependencies
 ├── README.md                             # Project documentation
 ```
