@@ -21,7 +21,7 @@ This project provides a lightweight, containerized network monitoring solution u
 
 
 ## 📦 Project Structure
-
+```
 ping-monitor/
 ├── ansible/
 │   └── playbooks/
@@ -52,7 +52,7 @@ ping-monitor/
 ├── Dockerfile                            # Container build for app or webhook
 ├── requirements.txt                      # Python dependencies
 ├── README.md                             # Project documentation
-
+```
 ---
 
 ## 🚀 Features
@@ -191,8 +191,8 @@ This repository automates the deployment and validation of a Kubernetes-based mo
 | Lightweight Deploy    | Deploy-only workflow                         | `.github/workflows/deploy.yaml`          |
 
 📁 Directory Structure:
-
-ping-monitor/
+```
+📁 ping-monitor/
 ├── ansible/
 │   └── playbooks/
 │       ├── deploy-monitoring.yml
@@ -202,7 +202,7 @@ ping-monitor/
 │   └── workflows/
 │       ├── ci.yaml
 │       └── deploy.yaml
-
+```
 🚀 Deployment Playbook: deploy-monitoring.yml
 Applies all Kubernetes manifests required for the monitoring stack:
 - Prometheus RBAC, rules, and config
