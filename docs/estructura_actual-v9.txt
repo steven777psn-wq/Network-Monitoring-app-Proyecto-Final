@@ -1,0 +1,171 @@
+.
+├── .ansible
+│   ├── collections
+│   ├── modules
+│   └── roles
+├── ansible
+│   └── playbooks
+│       ├── Ansible.txt
+│       ├── cleanup-all-namespaces.yml
+│       ├── deploy-monitoring.yml
+│       └── validate.yml
+├── check_env.py
+├── dashboards
+│   └── ping-latency-dashboard.json
+├── docker
+│   ├── app
+├── docker-compose.yaml
+├── Dockerfile
+├── .dockerignore
+├── docs
+│   └── estructura_actual-v9.txt
+├── .env
+├── .git
+│   ├── branches
+│   ├── COMMIT_EDITMSG
+│   ├── config
+│   ├── description
+│   ├── filter-repo
+│   │   ├── already_ran
+│   │   ├── changed-refs
+│   │   ├── commit-map
+│   │   ├── first-changed-commits
+│   │   ├── ref-map
+│   │   └── suboptimal-issues
+│   ├── HEAD
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── push-to-checkout.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   ├── exclude
+│   │   └── refs
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   ├── objects
+│   │   ├── 21
+│   │   ├── 31
+│   │   ├── 44
+│   │   ├── 45
+│   │   ├── 47
+│   │   ├── 4b
+│   │   ├── 4c
+│   │   ├── 6f
+│   │   ├── 79
+│   │   ├── 87
+│   │   ├── 93
+│   │   ├── c0
+│   │   ├── c3
+│   │   ├── d3
+│   │   ├── d8
+│   │   ├── e2
+│   │   ├── ee
+│   │   ├── f7
+│   │   ├── f9
+│   │   ├── info
+│   │   └── pack
+│   ├── ORIG_HEAD
+│   ├── packed-refs
+│   └── refs
+│       ├── heads
+│       ├── remotes
+│       └── tags
+├── .github
+│   └── workflows
+│       ├── ci.yaml
+│       └── deploy.yaml
+├── .gitignore
+├── infra
+│   ├── alertmanager
+│   │   └── alertmanager-config.yaml
+│   └── prometheus
+│       ├── custom-values.yaml
+│       ├── prometheus-rule.yaml
+│       └── prometheus.yaml
+├── k8s
+│   ├── deployments
+│   │   ├── network-monitor-deployment.yaml
+│   │   ├── network-monitor-servicemonitor.yaml
+│   │   └── network-monitor-service.yaml
+│   ├── monitoring
+│   │   ├── monitoring-services.yaml
+│   │   └── service-monitors
+│   ├── permisos-rbac
+│   │   ├── prometheus-rolebinding.yaml
+│   │   └── prometheus-role.yaml
+│   └── telegram-webhook
+│       ├── deployment.yaml
+│       ├── secret.yaml
+│       └── service.yaml
+├── README.md
+├── requirements.txt
+├── scripts
+│   ├── limpiarcontainerd.sh
+│   └── setup_master.sh
+├── src
+│   ├── app
+│   │   ├── config.py
+│   │   ├── .idea
+│   │   ├── main.py
+│   │   ├── ping_utils.py
+│   │   └── __pycache__
+│   └── telegram-webhook
+│       ├── app.py
+│       ├── Dockerfile
+│       ├── .dockerignore
+│       ├── .idea
+│       ├── requirements.txt
+│       └── .venv
+├── .venv
+│   ├── bin
+│   │   ├── activate
+│   │   ├── activate.csh
+│   │   ├── activate.fish
+│   │   ├── Activate.ps1
+│   │   ├── flask
+│   │   ├── gunicorn
+│   │   ├── ping3
+│   │   ├── pip
+│   │   ├── pip3
+│   │   ├── pip3.10
+│   │   ├── python -> python3
+│   │   ├── python3 -> /usr/bin/python3
+│   │   └── python3.10 -> python3
+│   ├── include
+│   ├── lib
+│   │   └── python3.10
+│   ├── lib64 -> lib
+│   └── pyvenv.cfg
+└── venv
+    ├── bin
+    │   ├── activate
+    │   ├── activate.csh
+    │   ├── activate.fish
+    │   ├── Activate.ps1
+    │   ├── flask
+    │   ├── pip
+    │   ├── pip3
+    │   ├── pip3.11
+    │   ├── python -> python3.11
+    │   ├── python3 -> python3.11
+    │   └── python3.11 -> /usr/bin/python3.11
+    ├── include
+    │   └── python3.11
+    ├── lib
+    │   └── python3.11
+    ├── lib64 -> lib
+    └── pyvenv.cfg
+
+75 directories, 95 files

@@ -50,6 +50,7 @@ grafana-data/
 grafana.db
 grafana.ini.bak
 grafana/
+dashboars/
 
 # ──────────────────────────────
 # 🧠 Monitoring Rules
@@ -78,7 +79,7 @@ Thumbs.db
 # ──────────────────────────────
 # 🧬 Git
 .git/
-docs/
+#docs/
 actions-runner/
 actions-runner/
 actions-runner/
