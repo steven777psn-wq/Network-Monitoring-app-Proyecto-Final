@@ -1,8 +1,24 @@
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![CI/CD: GitHub Actions](https://img.shields.io/github/actions/workflow/status/steven777psn-wq/Network-Monitoring-app-Proyecto-Final/ci.yaml?label=CI%2FCD)
+![Dockerized](https://img.shields.io/badge/Docker-ready-blue)
+
 # 🛰️ Network Monitoring Project
 
 This project provides a lightweight, containerized network monitoring solution using Python, Prometheus, Alertmanager, and Grafana dashboards. It is designed for educational and practical use, with a focus on clarity, reproducibility, and modular deployment.
 
----
+## 📚 Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Metrics Overview](#metrics-overview)
+- [Deployment](#deployment)
+- [Alerting System](#alerting-system)
+- [Lab Integration (EVE-NG)](#lab-integration-eve-ng)
+- [Automation Components](#automation-components)
+- [Screenshots](#process-evidence)
+- [Contributions](#contributions)
+- [License](#license)
+
 
 ## 📦 Project Structure
 
@@ -52,6 +68,21 @@ ping-monitor/
 - Helm-based Prometheus stack deployment
 - Grafana integration
 
+## 🧰 Technologies Used
+
+| Technology         | Purpose                                  | Notes / Integration                      |
+|--------------------|-------------------------------------------|------------------------------------------|
+| Python + ping3     | ICMP-based latency monitoring             | Custom metrics exposed via `/metrics`    |
+| Prometheus         | Metrics scraping and alert rule engine    | Deployed via Helm                        |
+| Grafana            | Dashboard visualization                   | Latency, outage heatmaps                 |
+| Alertmanager       | Alert routing                             | Integrated with Telegram webhook         |
+| Telegram Webhook   | Real-time notifications                   | Custom Flask app                         |
+| Docker Compose     | Local orchestration                       | Multi-container setup                    |
+| Kubernetes         | Production-grade deployment               | Manifests + Helm charts                  |
+| Ansible            | Automation of deployment and validation   | Playbooks for CI/CD                      |
+| GitHub Actions     | CI/CD pipeline                            | Cleanup, deploy, validate workflows      |
+| EVE-NG             | Lab simulation environment                | Virtual routers, firewalls, hosts        |
+
 ---
 
 ## 🧪 Metrics Overview
@@ -82,6 +113,13 @@ Includes:
 • 	Alertmanager configuration
 •       Telegram webhook deployment and service
 
+## 📊 Monitored Metrics
+
+| Metric Name                  | Description                          | PromQL Example                          |
+|------------------------------|--------------------------------------|-----------------------------------------|
+| `device_ping_latency_ms`     | Latency per device (ICMP)            | `avg(device_ping_latency_ms)`           |
+| `up`                         | Service availability                 | `up == 0` for unreachable targets       |
+| `probe_success` (optional)   | Ping success indicator               | `sum(probe_success)`                    |
 
 2. Deploy Prometheus stack via Helm
 
@@ -141,6 +179,16 @@ This repository automates the deployment and validation of a Kubernetes-based mo
 - Ansible Playbooks for deployment, cleanup, and validation
 - GitHub Actions Workflows for CI/CD automation
 - Kubernetes Manifests for RBAC, services, and monitoring pods
+
+## ⚙️ Automation Components
+
+| Component             | Description                                  | Location / File                         |
+|-----------------------|----------------------------------------------|------------------------------------------|
+| Deployment Playbook   | Applies all Kubernetes manifests             | `ansible/playbooks/deploy-monitoring.yml` |
+| Validation Playbook   | Healthchecks for Prometheus, Grafana, webhook| `ansible/playbooks/validate.yml`         |
+| Cleanup Playbook      | Deletes residual pods across namespaces      | `ansible/playbooks/cleanup-all-namespaces.yml` |
+| CI/CD Workflow        | Full pipeline: cleanup, deploy, validate     | `.github/workflows/ci.yaml`              |
+| Lightweight Deploy    | Deploy-only workflow                         | `.github/workflows/deploy.yaml`          |
 
 📁 Directory Structure:
 
@@ -228,7 +276,17 @@ It can be extended to send Telegram alerts...(Will work on this latter)
 - File paths are dynamically resolved.
 - Error handling is built-in with ignore_errors: true and conditional blocks.
 
+## Contributions
 
+This project is open to improvements. Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) guide to learn how to collaborate.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for more details.
+
+## Process Evidence
+
+Screenshots of deployment, monitoring, and alerting are available in the `/screenshots` folder.
 
 
 End...
