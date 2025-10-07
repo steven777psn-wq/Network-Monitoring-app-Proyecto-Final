@@ -2,11 +2,11 @@
 ![CI/CD: GitHub Actions](https://img.shields.io/github/actions/workflow/status/steven777psn-wq/Network-Monitoring-app-Proyecto-Final/ci.yaml?label=CI%2FCD)
 ![Dockerized](https://img.shields.io/badge/Docker-ready-blue)
 
-# 🛰️ Network Monitoring Project
+## Network Monitoring Project
 
 This project provides a lightweight, containerized network monitoring solution using Python, Prometheus, Alertmanager, and Grafana dashboards. It is designed for educational and practical use, with a focus on clarity, reproducibility, and modular deployment.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -20,7 +20,7 @@ This project provides a lightweight, containerized network monitoring solution u
 - [License](#license)
 
 
-## 📦 Project Structure
+## Project Structure
 ```
 ping-monitor/
 ├── ansible/
@@ -55,7 +55,7 @@ ping-monitor/
 ```
 ---
 
-## 🚀 Features
+## Features
 
 - ICMP-based latency monitoring using `ping3`
 - Prometheus metrics endpoint (`/metrics`)
@@ -68,9 +68,9 @@ ping-monitor/
 - Helm-based Prometheus stack deployment
 - Grafana integration
 
-## 🧰 Technologies Used
+## Technologies Used
 
-| Technology         | Purpose                                  | Notes / Integration                      |
+| Technology         | Purpose                                   | Notes / Integration                      |
 |--------------------|-------------------------------------------|------------------------------------------|
 | Python + ping3     | ICMP-based latency monitoring             | Custom metrics exposed via `/metrics`    |
 | Prometheus         | Metrics scraping and alert rule engine    | Deployed via Helm                        |
@@ -85,7 +85,7 @@ ping-monitor/
 
 ---
 
-## 🧪 Metrics Overview
+## Metrics Overview
 
 The Python app pings a list of devices and exposes latency metrics:
 
@@ -97,12 +97,12 @@ device_ping_latency_ms{device="123.1.1.1"} -1
 •       0 also considered unreachable in alert logic
 • 	Metrics are refreshed every 30 seconds.
 
-🔧 Local Deployment (Docker Compose)
+## Local Deployment (Docker Compose)
 
 cd infra/
 docker-compose up --build
 
-☁️ Kubernetes Deploymen
+## Kubernetes Deploymen
 1. Apply manifests
 
 kubectl apply -f k8s/YAMLs
@@ -113,7 +113,7 @@ Includes:
 • 	Alertmanager configuration
 •       Telegram webhook deployment and service
 
-## 📊 Monitored Metrics
+Monitored Metrics:
 
 | Metric Name                  | Description                          | PromQL Example                          |
 |------------------------------|--------------------------------------|-----------------------------------------|
@@ -135,7 +135,7 @@ Note: Ensure your app's Service has correct labels for Prometheus discovery.
 kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
 kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 -d
 
-📈 Planned Grafana Dashboard
+Planned Grafana Dashboard
 •       Latency over time per device
 •       Alert visualization for unreachable hosts
 •       Outage heatmap per device
@@ -143,7 +143,7 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 ![Grafana Dashboard](docs/screenshots/grafana-dashboard.png)
 
 
-🚨 Alerting System
+## Alerting System
 
 •       Prometheus alert rules defined in infra/prometheus/prometheus-rule.yaml
 •       Alerts include:
@@ -154,7 +154,7 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 
 ![Prometheus Alert Firing](docs/screenshots/prometheus-alert-firing.png)
 
-📬 Telegram Webhook Integration
+## Telegram Webhook Integration
 • 	Custom Flask app deployed as a Kubernetes service
 • 	Receives alerts from Alertmanager via webhook
 • 	Filters and formats messages for Telegram delivery
@@ -165,7 +165,7 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 <h4>Notificaciones por Telegram</h4>
 <img src="docs/screenshots/telegram-alerts.png" alt="Telegram Alerts" width="200"/>
 
-🧪 EVE-NG Lab Integration
+## EVE-NG Lab Integration
 
  This project is also deployed and tested within a custom EVE-NG lab environment, allowing for realistic network simulations scenarios.
 • 	The lab includes virtual routers, switches, Win Server, Palo Alto Firewall and Linux & Windows hosts configured to respond to ICMP probes.
@@ -175,22 +175,22 @@ kubectl get secret kube-prometheus-stack-grafana -n monitoring -o jsonpath="{.da
 
 ![EVE-NG Lab](docs/screenshots/EVE-NG_Lab.png)
 
-🔍 Monitoring Integration
+## Monitoring Integration
 • 	The Python monitoring app pings key devices across VLANs
 • 	Prometheus scrapes metrics from the app, enabling visibility into latency and reachability across zones
 • 	Alertmanager triggers notifications when devices become unreachable or latency exceeds thresholds
 • 	Telegram webhook delivers alerts in real time to your configured bot/channe
 
-📦 Lab Monitoring Stack: CI/CD + Ansible Automation
+## Lab Monitoring Stack: CI/CD + Ansible Automation
 
 This repository automates the deployment and validation of a Kubernetes-based monitoring stack using Ansible and GitHub Actions. It includes Prometheus, Grafana, Alertmanager, and a Telegram webhook, with full CI/CD integration and healthcheck routines.
 
-🧰 Components
+Components:
 - Ansible Playbooks for deployment, cleanup, and validation
 - GitHub Actions Workflows for CI/CD automation
 - Kubernetes Manifests for RBAC, services, and monitoring pods
 
-## ⚙️ Automation Components
+## Automation Components
 
 | Component             | Description                                  | Location / File                         |
 |-----------------------|----------------------------------------------|------------------------------------------|
@@ -198,11 +198,12 @@ This repository automates the deployment and validation of a Kubernetes-based mo
 | Validation Playbook   | Healthchecks for Prometheus, Grafana, webhook| `ansible/playbooks/validate.yml`         |
 | Cleanup Playbook      | Deletes residual pods across namespaces      | `ansible/playbooks/cleanup-all-namespaces.yml` |
 | CI/CD Workflow        | Full pipeline: cleanup, deploy, validate     | `.github/workflows/ci.yaml`              |
-| Lightweight Deploy    | Deploy-only workflow                         | `.github/workflows/deploy.yaml`          |
+| Lightweight Deploy    | Deploy-only monitoring workflow              | `.github/workflows/deploy.yaml`          |
 
-📁 Directory Structure:
+Directory Structure:
 ```
-📁 ping-monitor/
+|ping-monitor/
+| 
 ├── ansible/
 │   └── playbooks/
 │       ├── deploy-monitoring.yml
@@ -213,76 +214,74 @@ This repository automates the deployment and validation of a Kubernetes-based mo
 │       ├── ci.yaml
 │       └── deploy.yaml
 ```
-🚀 Deployment Playbook: deploy-monitoring.yml
-Applies all Kubernetes manifests required for the monitoring stack:
-- Prometheus RBAC, rules, and config
-- Alertmanager configuration
-- Telegram webhook
-- Network monitoring services
+1. Deployment Playbook:
+File: ansible-playbook ansible/playbooks/deploy-monitoring.yml
+Applies all required Kubernetes manifests for the monitoring stack:
+• 	Prometheus: RBAC, rules, configuration
+• 	Alertmanager: configuration
+• 	Telegram webhook
+• 	Network monitoring services
 
-# ansible-playbook ansible/playbooks/deploy-monitoring.yml
-
-✅ Validation Playbook: validate.yml
+2. Validation Playbook: 
+File: ansible-playbook ansible/playbooks/validate.yml
 Performs healthchecks using internal cluster DNS:
-- Prometheus readiness (/-/ready)
-- Grafana availability
-- Telegram webhook pod status
-Includes conditional notifications for success or failure
+• 	Prometheus readiness ()
+• 	Grafana availability
+• 	Telegram webhook pod status
+Includes conditional logic to print success or failure messages.
 
-# ansible-playbook ansible/playbooks/validate.yml
-
-🧹 Cleanup Playbook: cleanup-all-namespaces.yml
-Deletes residual pods across key namespaces:
+3. Cleanup Playbook: 
+File: ansible/playbooks/cleanup-all-namespaces.yml
+Removes residual pods across key namespaces:
 - Completed pods
 - Failed pods
 - Pods with ContainerStatusUnknown
-ansible-playbook ansible/playbooks/cleanup-all-namespaces.yml
 
-# ansible-playbook ansible/playbooks/cleanup-all-namespaces.yml
-
-⚙️ GitHub Actions Workflows
-ci.yaml: Full CI/CD Pipeline
-Runs on every push to main or manual trigger. Steps:
-- Checkout repo
+4. GitHub Actions Workflows (CI/CD)
+ 4.1. ci.yaml – Full CI/CD Pipeline
+Triggered on every push to main or manually. Steps:
+- Checkout repository
 - Install dependencies (ansible, kubectl)
 - Cleanup residual pods
 - Deploy monitoring stack
 - Validate services
-
+```
 name: RootZone CI/CD Pipeline
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+```
   
-deploy.yaml: Lightweight Deployment
+ 4.2. Deploy.yaml: Lightweight Deployment
 Runs only the deployment playbook on push to main.
-
+```
 name: Deploy Monitoring Stack
 on:
   push:
     branches:
       - main
+```
 
 Both workflows run on a self-hosted runner for full control over the environment
 
-🧪 Pre-commit Validation
+5. Pre-commit Validation
 Before pushing changes:
-
+```
 # Lint for best practices
 ansible-lint ansible/playbooks/*.yml
 
 # Dry-run to preview changes
 ansible-playbook ansible/playbooks/deploy-monitoring.yml --check
-
-📬 Notifications & Healthchecks
+```
+6. Notifications & Healthchecks
 The validation playbook includes logic to:
 - Show endpoint status
 - Detect failures
 - Print success or failure messages
-It can be extended to send Telegram alerts...(Will work on this latter) 
+It can be extended to send Telegram alerts...(Will work on this latter)
 
-🧠 Notes
+## Notes
 - File paths are dynamically resolved.
 - Error handling is built-in with ignore_errors: true and conditional blocks.
 

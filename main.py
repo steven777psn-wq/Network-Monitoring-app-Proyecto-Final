@@ -3,24 +3,28 @@ from prometheus_client import Gauge, generate_latest, CONTENT_TYPE_LATEST
 from ping3 import ping
 import os
 import logging
-import sys
+from datetime import datetime
 
 app = Flask(__name__)
 
-# Configurar logger para salida estándar (docker logs)
+# Ruta de log segura y accesible
+LOG_PATH = '/home/evargas/ping-monitor/docs/logs/ping_monitor.log'
+
+# Reforzar el logger para que Gunicorn no lo ignore
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-if not any(isinstance(h, logging.StreamHandler) for h in logger.handlers):
-    handler = logging.StreamHandler(sys.stdout)
+# Evitar duplicación de handlers
+if not any(isinstance(h, logging.FileHandler) and h.baseFilename == LOG_PATH for h in logger.handlers):
+    handler = logging.FileHandler(LOG_PATH)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-# Métrica Prometheus
+# Métrica para latencia
 latency = Gauge('device_ping_latency_ms', 'Latencia ICMP en ms a dispositivos', ['ip'])
 
-# Lista de IPs desde variable de entorno
+# Obtener lista de IPs desde variable de entorno
 target_ips = os.getenv('TARGET_IPS', '10.1.1.30,123.1.1.11,172.16.1.54,123.1.1.1')
 targets = [ip.strip() for ip in target_ips.split(',')]
 
@@ -30,7 +34,6 @@ def home():
 
 @app.route('/metrics')
 def metrics():
-    logger.info("Scrape recibido desde Prometheus")
     for ip in targets:
         try:
             result = ping(ip, timeout=2)
@@ -45,3 +48,6 @@ def metrics():
             logger.error(f"Error al hacer ping a {ip}: {e}")
 
     return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8081, threaded=True)

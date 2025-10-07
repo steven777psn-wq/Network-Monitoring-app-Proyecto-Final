@@ -1,4 +1,4 @@
-- name: 🚀 Deploy Monitoring Stack
+- name:  Deploy Monitoring Stack
   hosts: localhost
   connection: local
   gather_facts: false
@@ -16,18 +16,18 @@
 
   tasks:
 
-    # 🛡️ Prometheus RBAC
+    # Prometheus RBAC
     - name: Apply Prometheus RBAC
       shell: kubectl apply --validate=false -f "{{ item }}"
       loop: "{{ rbac_files }}"
       tags: prometheus_rbac
 
-    # 📊 Prometheus Rules
+    # Prometheus Rules
     - name: Apply Prometheus rules
       shell: kubectl apply --validate=false -f "{{ prometheus_rule }}"
       tags: prometheus_rules
 
-    # ⚙️ Prometheus ConfigMap
+    # Prometheus ConfigMap
     - name: Apply Prometheus config (ConfigMap)
       shell: |
         kubectl create configmap prometheus-config \
@@ -36,7 +36,7 @@
       ignore_errors: yes
       tags: prometheus_config
 
-    # 🧩 Monitoring Services
+    # Monitoring Services
     - name: Apply monitoring services
       shell: kubectl apply --validate=false -f "{{ item }}"
       loop: "{{ monitoring_manifests }}"
@@ -44,12 +44,12 @@
       ignore_errors: yes
       tags: monitoring_services
 
-    # 🚨 Alertmanager
+    # Alertmanager
     - name: Apply Alertmanager config
       shell: kubectl apply --validate=false -f "{{ alertmanager_config }}"
       tags: alertmanager
 
-    # 📬 Telegram Webhook
+    # Telegram Webhook
     - name: Deploy Telegram webhook
       shell: kubectl apply --validate=false -f "{{ item }}"
       loop: "{{ telegram_manifests }}"
@@ -57,7 +57,7 @@
       ignore_errors: yes
       tags: telegram_webhook
 
-    # 📡 Network Monitor
+    # Network Monitor
     - name: Deploy Network Monitor
       shell: kubectl apply --validate=false -f "{{ item }}"
       loop: "{{ network_manifests }}"
@@ -65,7 +65,7 @@
       ignore_errors: yes
       tags: network_monitor
 
-    # ✅ Notificación final
+    # Notificación final
     - name: Notify deployment success
-      shell: echo "✅ Monitoring stack deployed successfully"
+      shell: echo "Monitoring stack deployed successfully"
       tags: notify

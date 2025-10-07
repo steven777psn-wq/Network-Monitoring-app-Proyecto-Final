@@ -1,11 +1,11 @@
-- name: ✅ Validate monitoring services
+- name:  Validate monitoring services
   hosts: localhost
   connection: local
   gather_facts: false
 
   tasks:
 
-    - name: 🔍 Check Prometheus endpoint
+    - name: Check Prometheus endpoint
       ansible.builtin.uri:
         url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/-/ready
         status_code: 200
@@ -13,7 +13,7 @@
       register: prometheus_status
       ignore_errors: true
 
-    - name: 📊 Check Grafana endpoint
+    - name: Check Grafana endpoint
       ansible.builtin.uri:
         url: http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local:80
         status_code: 200
@@ -21,25 +21,25 @@
       register: grafana_status
       ignore_errors: true
 
-    - name: 📬 Check Telegram webhook pod
+    - name: Check Telegram webhook pod
       ansible.builtin.shell: kubectl get pods -n default | grep telegram-webhook
       register: webhook_status
       changed_when: false
       ignore_errors: true
 
-    - name: 🧾 Show Prometheus response
+    - name: Show Prometheus response
       ansible.builtin.debug:
         var: prometheus_status.status
 
-    - name: 🧾 Show Grafana response
+    - name: Show Grafana response
       ansible.builtin.debug:
         var: grafana_status.status
 
-    - name: 🧾 Show webhook pod status
+    - name: Show webhook pod status
       ansible.builtin.debug:
         var: webhook_status.stdout_lines
 
-    - name: 🚨 Notify if any service failed
+    - name: Notify if any service failed
       when: >
         prometheus_status.status != 200 or
         grafana_status.status != 200 or
@@ -47,12 +47,12 @@
       block:
         - name: Print failure message
           ansible.builtin.debug:
-            msg: "❌ One or more services failed validation. Check logs above."
+            msg: "One or more services failed validation. Check logs above."
 
-    - name: ✅ Notify success
+    - name: Notify success
       when: >
         prometheus_status.status == 200 and
         grafana_status.status == 200 and
         webhook_status.rc == 0
       ansible.builtin.debug:
-        msg: "✅ All monitoring services validated successfully."
+        msg: "All monitoring services validated successfully."
