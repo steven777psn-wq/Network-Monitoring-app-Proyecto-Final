@@ -4,6 +4,6 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY src/app/main.py ./main.py
+COPY src/app/ ./app/
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "main:app"]
+CMD ["gunicorn", "--workers", "1", "--bind", "0.0.0.0:8080", "app.main:app"]
