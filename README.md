@@ -53,11 +53,11 @@ ping-monitor/
 - EVE-NG: Network simulation for testing
 
 ## Architecture Diagram
-
+```
 [ping-monitor app] → [Prometheus] → [Alertmanager] → [Telegram]
                           ↓
                       [Grafana]
-
+```
 ## Metrics Overview
 
 The Python app pings a list of devices and exposes latency metrics:
