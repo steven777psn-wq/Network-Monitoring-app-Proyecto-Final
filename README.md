@@ -114,10 +114,10 @@ GitHub Actions automate:
 ## EVE-NG Lab Integration
 
  This project is also deployed and tested within a custom EVE-NG lab environment, allowing for realistic network simulations scenarios.
-• 	The lab includes virtual routers, switches, Win Server, Palo Alto Firewall and Linux & Windows hosts configured to respond to ICMP probes.
-• 	Prometheus and the Python monitoring app are deployed in isolated containers within the lab.
-• 	This setup enables controlled testing of latency, packet loss, and alerting behavior under various network conditions.
-• 	EVE-NG provides a visual topology and supports reproducible demos for testing and education.
+- The lab includes virtual routers, switches, Win Server, Palo Alto Firewall and Linux & Windows hosts configured to respond to ICMP probes.
+- Prometheus and the Python monitoring app are deployed in isolated containers within the lab.
+- This setup enables controlled testing of latency, packet loss, and alerting behavior under various network conditions.
+- EVE-NG provides a visual topology and supports reproducible demos for testing and education.
 
 ![EVE-NG Lab](docs/screenshots/EVE-NG_Lab.png)
 
