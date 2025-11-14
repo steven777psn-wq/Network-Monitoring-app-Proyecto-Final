@@ -100,6 +100,26 @@ GitHub Actions automate:
 - Cleanup routines for reproducible lab environments
 ![CI/CD Tasks](docs/screenshots/CI-CD_Tasks.png)
 
+## Accessing Monitoring Interfaces (Kubernetes Deployment)
+Use the following port-forwarding commands to access the monitoring interfaces locally:
+- Grafana
+```
+kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
+```
+Then open: http://localhost:3001
+
+- Prometheus
+```
+kubectl port-forward svc/kube-prometheus-stack-prometheus 9191:9090 -n monitoring
+```
+Then open: http://localhost:9191
+
+-Alertmanager
+```
+kubectl port-forward svc/kube-prometheus-stack-alertmanager 9193:9093 -n monitoring
+```
+Then open: http://localhost:9193
+
 ## Screenshots
 
 - Prometheus target status
