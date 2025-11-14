@@ -114,7 +114,7 @@ kubectl port-forward svc/kube-prometheus-stack-prometheus 9191:9090 -n monitorin
 ```
 Then open: http://localhost:9191
 
--Alertmanager
+- Alertmanager
 ```
 kubectl port-forward svc/kube-prometheus-stack-alertmanager 9193:9093 -n monitoring
 ```
