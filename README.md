@@ -66,9 +66,9 @@ Example text:
 device_ping_latency_ms{device="123.1.1.1"} 23.5
 device_ping_latency_ms{device="123.1.1.1"} -1
 
-• 	0 or -1 indicates unreachable or failed ping.
-•       +1 Ping success status.
-• 	Metrics are refreshed every 30 seconds.
+- 0 or -1 indicates unreachable or failed ping.
+- +1 Ping success status.
+- Metrics are refreshed every 30 seconds.
 
 ## Educational Use Case:
 
