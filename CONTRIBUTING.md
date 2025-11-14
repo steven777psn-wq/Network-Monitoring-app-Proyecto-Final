@@ -22,23 +22,22 @@ To contribute, follow these steps:
 8. Open a Pull Request and describe your contribution
 
 ## Coding Standards
-• Use clear, descriptive variable and function names
-• Comment your code to explain logic and decisions
-• Keep scripts modular and reusable
-• Follow existing formatting and indentation styles
-• Validate dashboards and PromQL expressions before submitting
+- Use clear, descriptive variable and function names
+- Comment your code to explain logic and decisions
+- Keep scripts modular and reusable
+- Follow existing formatting and indentation styles
+- Validate dashboards and PromQL expressions before submitting
 
 ## Documentation
 If your contribution affects setup, usage, or monitoring logic, please update the relevant documentation:
-• for general instructions
-• Add screenshots to  if applicable
-• Include new metrics or alerts in the Grafana dashboard section
+- Add screenshots to  if applicable
+- Include new metrics or alerts in the Grafana dashboard section
 
 ## Issues and Suggestions
 If you find a bug or have an idea for improvement, feel free to open an Issue. Please include:
-• A clear title and description
-• Steps to reproduce (if applicable)
-• Screenshots or logs that help clarify the issue
+- A clear title and description
+- Steps to reproduce (if applicable)
+- Screenshots or logs that help clarify the issue
 
 ## License
 By contributing, you agree that your code will be released under the MIT License.

@@ -120,6 +120,10 @@ kubectl port-forward svc/kube-prometheus-stack-alertmanager 9193:9093 -n monitor
 ```
 Then open: http://localhost:9193
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0b86925 (enhance README with architecture, quick start, metrics table, and screenshots section)
 ## Screenshots
 
 - Prometheus target status
